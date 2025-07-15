@@ -5,10 +5,10 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 
 	"github.com/wellcom-rocks/updates-sucks/pkg/config"
+	"github.com/wellcom-rocks/updates-sucks/pkg/version"
 )
 
 type GitScanner struct {
@@ -136,50 +136,20 @@ func (g *GitScanner) findLatestVersion(tags []string, scheme string) (string, er
 }
 
 func (g *GitScanner) findLatestSemVer(tags []string) (string, error) {
-	// Simple regex for semantic versioning
-	semverRegex := regexp.MustCompile(`^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$`)
-
-	var validTags []string
-	for _, tag := range tags {
-		if semverRegex.MatchString(tag) {
-			validTags = append(validTags, tag)
-		}
-	}
-
-	if len(validTags) == 0 {
-		return "", fmt.Errorf("no valid semver tags found")
-	}
-
-	// For now, return the last valid tag (should implement proper semver comparison)
-	return validTags[len(validTags)-1], nil
+	// Import the version package functions to properly sort semver tags
+	return findLatestVersionFromTags(tags, "semver")
 }
 
 func (g *GitScanner) findLatestCalVer(tags []string) (string, error) {
-	// Simple regex for calendar versioning (YYYY.MM.DD or YYYY.MM.MICRO)
-	calverRegex := regexp.MustCompile(`^(\d{4})\.(\d{1,2})\.(\d+)$`)
-
-	var validTags []string
-	for _, tag := range tags {
-		if calverRegex.MatchString(tag) {
-			validTags = append(validTags, tag)
-		}
-	}
-
-	if len(validTags) == 0 {
-		return "", fmt.Errorf("no valid calver tags found")
-	}
-
-	// For now, return the last valid tag (should implement proper calver comparison)
-	return validTags[len(validTags)-1], nil
+	return findLatestVersionFromTags(tags, "calver")
 }
 
 func (g *GitScanner) findLatestString(tags []string) (string, error) {
-	if len(tags) == 0 {
-		return "", fmt.Errorf("no tags found")
-	}
+	return findLatestVersionFromTags(tags, "string")
+}
 
-	// For string versioning, just return the last tag
-	return tags[len(tags)-1], nil
+func findLatestVersionFromTags(tags []string, scheme string) (string, error) {
+	return version.GetLatestVersion(tags, scheme)
 }
 
 func (g *GitScanner) addTokenToURL(repoURL, token string) string {
