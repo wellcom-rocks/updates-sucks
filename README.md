@@ -13,6 +13,11 @@ A command-line tool for automating software version monitoring for DevOps engine
 
 ## Installation
 
+### Direct Installation
+```bash
+go install github.com/wellcom-rocks/updates-sucks@latest
+```
+
 ### Build from Source
 
 ```bash
