@@ -1,0 +1,53 @@
+{
+  "repositories": [
+    {
+      "name": "Kubernetes",
+      "type": "git",
+      "url": "https://github.com/kubernetes/kubernetes.git",
+      "currentVersion": "v1.28.0",
+      "versioning": {
+        "scheme": "semver",
+        "ignorePrefix": "v"
+      }
+    },
+    {
+      "name": "Docker",
+      "type": "git",
+      "url": "https://github.com/docker/docker.git",
+      "currentVersion": "v24.0.0",
+      "versioning": {
+        "scheme": "semver",
+        "ignorePrefix": "v"
+      }
+    },
+    {
+      "name": "Prometheus",
+      "type": "git",
+      "url": "https://github.com/prometheus/prometheus.git",
+      "currentVersion": "v2.45.0",
+      "versioning": {
+        "scheme": "semver",
+        "ignorePrefix": "v"
+      }
+    },
+    {
+      "name": "Grafana",
+      "type": "git",
+      "url": "https://github.com/grafana/grafana.git",
+      "currentVersion": "v10.0.0",
+      "versioning": {
+        "scheme": "semver",
+        "ignorePrefix": "v"
+      }
+    },
+    {
+      "name": "Example CalVer Project",
+      "type": "git",
+      "url": "https://github.com/example/calver-project.git",
+      "currentVersion": "2024.05.1",
+      "versioning": {
+        "scheme": "calver"
+      }
+    }
+  ]
+}
