@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+updates-sucks
 
 # Test binary, built with `go test -c`
 *.test
