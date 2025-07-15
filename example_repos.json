@@ -7,7 +7,8 @@
       "currentVersion": "v1.28.0",
       "versioning": {
         "scheme": "semver",
-        "ignorePrefix": "v"
+        "ignorePrefix": "v",
+        "ignoreSuffixes": ["-alpha", "-beta", "-rc"]
       }
     },
     {

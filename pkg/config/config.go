@@ -19,8 +19,9 @@ type Repository struct {
 }
 
 type Versioning struct {
-	Scheme       string `json:"scheme,omitempty"`
-	IgnorePrefix string `json:"ignorePrefix,omitempty"`
+	Scheme        string   `json:"scheme,omitempty"`
+	IgnorePrefix  string   `json:"ignorePrefix,omitempty"`
+	IgnoreSuffixes []string `json:"ignoreSuffixes,omitempty"`
 }
 
 type Auth struct {
