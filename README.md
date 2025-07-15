@@ -1,4 +1,4 @@
-# Version-Scanner CLI
+# Updates-Sucks CLI
 
 A command-line tool for automating software version monitoring for DevOps engineers and system administrators.
 
@@ -16,29 +16,29 @@ A command-line tool for automating software version monitoring for DevOps engine
 ### Build from Source
 
 ```bash
-go build -o version-scanner
+go build -o updates-sucks
 ```
 
 ### Usage
 
 ```bash
 # Scan all repositories
-./version-scanner scan
+./updates-sucks scan
 
 # Scan specific repository
-./version-scanner scan "Kubernetes"
+./updates-sucks scan "Kubernetes"
 
 # Use custom configuration file
-./version-scanner scan --file /path/to/config.json
+./updates-sucks scan --file /path/to/config.json
 
 # JSON output for automation
-./version-scanner scan --format json
+./updates-sucks scan --format json
 
 # Verbose output for debugging
-./version-scanner scan --verbose
+./updates-sucks scan --verbose
 
 # Quiet output for CI/CD
-./version-scanner scan --quiet
+./updates-sucks scan --quiet
 ```
 
 ## Configuration
@@ -98,22 +98,22 @@ Create a `repos.json` file in your project directory:
 
 ```bash
 # Check for updates
-./version-scanner scan
+./updates-sucks scan
 
 # Output:
 # Scanning 3 repositories...
-# 
+#
 # - Kubernetes: UP-TO-DATE (Current: v1.28.0)
 # - Docker: NEW VERSION FOUND! (Current: v24.0.0 -> Latest: v24.0.5)
 # - Prometheus: UP-TO-DATE (Current: v2.45.0)
-# 
+#
 # Scan finished. Updates available for 1 repository(ies).
 ```
 
 ### JSON Output
 
 ```bash
-./version-scanner scan --format json
+./updates-sucks scan --format json
 ```
 
 ```json
@@ -145,7 +145,7 @@ Create a `repos.json` file in your project directory:
 
 ```bash
 #!/bin/bash
-./version-scanner scan --quiet --format json
+./updates-sucks scan --quiet --format json
 
 case $? in
     0)
@@ -172,14 +172,14 @@ esac
 
 ```bash
 export GITHUB_TOKEN="your-token-here"
-./version-scanner scan
+./updates-sucks scan
 ```
 
 ### SSH Key
 
 ```bash
 export SSH_KEY_PATH="/path/to/your/ssh/key"
-./version-scanner scan
+./updates-sucks scan
 ```
 
 ## Supported Version Schemes
