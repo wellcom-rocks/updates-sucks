@@ -1,0 +1,82 @@
+name: Scan Repositories
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs daily at 6:00 AM UTC
+  workflow_dispatch:      # Allow manual trigger
+  push:
+    paths:
+      - 'example_repos.json'  # Run when example_repos.json is changed
+
+jobs:
+  scan:
+    name: Scan Repositories
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+      
+      - name: Build updates-sucks
+        run: go build -o updates-sucks
+
+      - name: Run repository scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # For accessing private GitHub repos
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # Optional: For accessing GitLab repos
+        run: |
+          ./updates-sucks scan --file example_repos.json --format json > scan_results.json
+
+      - name: Check scan status
+        id: check_updates
+        run: |
+          case $? in
+            0)
+              echo "status=up_to_date" >> $GITHUB_OUTPUT
+              ;;
+            1)
+              echo "status=updates_available" >> $GITHUB_OUTPUT
+              ;;
+            2)
+              echo "status=config_error" >> $GITHUB_OUTPUT
+              exit 1
+              ;;
+            3)
+              echo "status=scan_error" >> $GITHUB_OUTPUT
+              exit 1
+              ;;
+          esac
+
+      - name: Create GitHub Issue for Updates
+        if: steps.check_updates.outputs.status == 'updates_available'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const scanResults = JSON.parse(fs.readFileSync('scan_results.json', 'utf8'));
+            
+            const updatesAvailable = scanResults.repositories
+              .filter(repo => repo.status === 'UPDATE_AVAILABLE')
+              .map(repo => `- ${repo.name}: ${repo.currentVersion} → ${repo.latestVersion}`)
+              .join('\n');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔄 Repository Updates Available',
+              body: `### Updates Available\n\n${updatesAvailable}\n\n---\n*This issue was automatically created by the repository scan workflow.*`,
+              labels: ['dependencies', 'automated']
+            });
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v3
+        with:
+          name: scan-results
+          path: scan_results.json
+          retention-days: 7
