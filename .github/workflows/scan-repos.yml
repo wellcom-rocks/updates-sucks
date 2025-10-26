@@ -31,7 +31,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # For accessing private GitHub repos
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # Optional: For accessing GitLab repos
         run: |
-          ./updates-sucks scan --file example_repos.json --format json > scan_results.json || cat scan_results.json
+          ./updates-sucks scan --file example_repos.json --format json > scan_results.json
+
       - name: Check scan status
         id: check_updates
         run: |
