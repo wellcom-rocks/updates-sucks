@@ -40,15 +40,6 @@
         "scheme": "semver",
         "ignorePrefix": "v"
       }
-    },
-    {
-      "name": "Example CalVer Project",
-      "type": "git",
-      "url": "https://github.com/example/calver-project.git",
-      "currentVersion": "2024.05.1",
-      "versioning": {
-        "scheme": "calver"
-      }
     }
   ]
 }
